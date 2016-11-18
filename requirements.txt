@@ -1,0 +1,23 @@
+cycler==0.9.0
+Cython==0.23.4
+gdbn==0.1
+numpy==1.11.1
+gnumpy==0.2
+h5py==2.5.0
+hickle==1.4.0
+joblib==0.9.3
+scipy==0.18.0
+matplotlib==1.5.1
+nolearn==0.6.0
+pandas==0.17.1
+Pillow==3.1.0
+pyparsing==2.0.7
+python-dateutil==2.4.2
+pytz==2015.7
+scikit-learn==0.17
+simplejson==3.8.2
+singledispatch==3.4.0.3
+six==1.10.0
+tabulate==0.7.5
+Theano==0.8.2
+-e git+https://github.com/Lasagne/Lasagne.git@8f4f9b26b90abcb303da2cbe9ab04f63676aa6bf#egg=Lasagne

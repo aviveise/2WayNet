@@ -9,11 +9,11 @@ class Params:
     Parameters for the training and inference of the 2-WayNet
     """
     # region Training Params
-    BATCH_SIZE = 10  # number of samples in the batch for training
+    BATCH_SIZE = 128  # number of samples in the batch for training
     VALIDATION_BATCH_SIZE = 1000  # number of samples in the batch for testing
     CROSS_VALIDATION = True  # enable the running on validation after each epoch
-    EPOCH_NUMBER = 10  # number of epochs
-    DECAY_EPOCH = [20, 40, 60]  # epochs which include a learning rate decay
+    EPOCH_NUMBER = 100  # number of epochs
+    DECAY_EPOCH = [20, 40, 60, 80]  # epochs which include a learning rate decay
     DECAY_RATE = 0.5  # The factor to multiply the learning rate in each decay
     BASE_LEARNING_RATE = 0.0001  # starting learning rate
     MOMENTUM = 0.9  # momentum for the training
@@ -31,7 +31,7 @@ class Params:
     # endregion
 
     # region Architecture
-    LAYER_SIZES = [512, 256, 691]  # Size of the hidden layers
+    LAYER_SIZES = [392, 50, 392]  # Size of the hidden layers
     OUTPUT_LAYER = 1  # The layer from which to take the representations
     DROP_PROBABILITY = 0.5  # Probability for removing a neuron in the dropout/tied dropout layer
     WEIGHT_INIT = lasagne.init.GlorotUniform()  # Initialization method for the weights

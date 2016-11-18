@@ -6,6 +6,7 @@ import numpy
 import numpy.linalg
 import scipy.linalg
 import scipy.sparse.linalg
+from scipy.spatial.distance import cdist
 
 from sklearn import preprocessing
 from matplotlib import pyplot
@@ -153,7 +154,7 @@ def complete_rank(x, y, reduce_x=0, x_y_mapping=None):
             else:
                 x_y_mapping = numpy.arange(x.shape[0])
 
-        y_x_sim_matrix = scipy.cdist(x, y, Params.SIMILARITY_METRIC)
+        y_x_sim_matrix = cdist(x, y, Params.SIMILARITY_METRIC)
 
         recall_n_vals = [1, 5]
         num_of_recall_n_vals = len(recall_n_vals)

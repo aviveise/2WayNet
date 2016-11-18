@@ -40,11 +40,11 @@ class DatasetBase(object):
         OutputLog().write('Loading dataset: ' + data_set_parameters['name'])
 
         self.dataset_path = data_set_parameters['path']
+
         self.trainset = None
         self.testset = None
         self.tuning = None
-        self.negatives = None
-        self.reduce_test = 0
+
         self.reduce_val = 0
         self.x_y_mapping = {'train': None, 'dev': None, 'test': None}
         self.x_reduce = {'train': None, 'dev': None, 'test': None}

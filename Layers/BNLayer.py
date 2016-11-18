@@ -1,4 +1,6 @@
+import numpy
 import theano
+
 from lasagne import init
 from lasagne import nonlinearities
 from lasagne.layers import Layer
@@ -33,7 +35,6 @@ class BatchNormalizationLayer(Layer):
                  beta=init.Constant(0.),
                  nonlinearity=nonlinearities.rectify,
                  epsilon=0.001,
-                 train_gamma=True,
                  **kwargs):
         super(BatchNormalizationLayer, self).__init__(incoming, **kwargs)
         if nonlinearity is None:
@@ -41,20 +42,20 @@ class BatchNormalizationLayer(Layer):
         else:
             self.nonlinearity = nonlinearity
 
-        self.num_units = int(np.prod(self.input_shape[1:]))
-        self.gamma = self.add_param(gamma, (self.num_units,), name="BatchNormalizationLayer:gamma", regularizable=train_gamma,
-                                    gamma=True, trainable=train_gamma)
+        self.num_units = int(numpy.prod(self.input_shape[1:]))
+        self.gamma = self.add_param(gamma, (self.num_units,), name="BatchNormalizationLayer:gamma", regularizable=True,
+                                    gamma=True, trainable=True)
         self.beta = self.add_param(beta, (self.num_units,), name="BatchNormalizationLayer:beta", regularizable=False)
         self.epsilon = epsilon
 
         self.mean_inference = theano.shared(
-            np.zeros((1, self.num_units), dtype=theano.config.floatX),
+            numpy.zeros((1, self.num_units), dtype=theano.config.floatX),
             borrow=True,
             broadcastable=(True, False))
         self.mean_inference.name = "shared:mean"
 
         self.variance_inference = theano.shared(
-            np.zeros((1, self.num_units), dtype=theano.config.floatX),
+            numpy.zeros((1, self.num_units), dtype=theano.config.floatX),
             borrow=True,
             broadcastable=(True, False))
         self.variance_inference.name = "shared:variance"
@@ -81,8 +82,6 @@ class BatchNormalizationLayer(Layer):
             v = self.variance_inference
 
         input_hat = (input - m) / v  # normalize
-        y = input_hat / self.gamma + self.beta  # scale and shift
+        y = input_hat * self.gamma + self.beta  # scale and shift
 
-        if input.ndim > 2:
-            y = T.reshape(y, output_shape)
         return self.nonlinearity(y)

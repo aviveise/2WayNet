@@ -12,7 +12,7 @@ class Params:
     BATCH_SIZE = 128  # number of samples in the batch for training
     VALIDATION_BATCH_SIZE = 1000  # number of samples in the batch for testing
     CROSS_VALIDATION = True  # enable the running on validation after each epoch
-    EPOCH_NUMBER = 100  # number of epochs
+    EPOCH_NUMBER = 80  # number of epochs
     DECAY_EPOCH = [20, 40, 60, 80]  # epochs which include a learning rate decay
     DECAY_RATE = 0.5  # The factor to multiply the learning rate in each decay
     BASE_LEARNING_RATE = 0.0001  # starting learning rate
@@ -25,7 +25,7 @@ class Params:
     GAMMA_COEF = 0.05
     WITHEN_REG_X = 0.05
     WITHEN_REG_Y = 0.05
-    L2_LOSS = 1
+    L2_LOSS = 0.5
     LOSS_X = 1
     LOSS_Y = 1
     # endregion

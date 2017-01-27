@@ -24,8 +24,8 @@ from params import Params
 
 import DataSetReaders
 
-OUTPUT_DIR = r'/home/avive/theses/2WayNet/results/'
-INPUT_PATH = r'/home/avive/theses/2WayNet/results/2016_11_19_14_47_38'
+OUTPUT_DIR = r'/path/to/results/'
+INPUT_PATH = r'/path/to/model'
 VALIDATE_ALL = False
 MEMORY_LIMIT = 8000000.
 
@@ -72,21 +72,12 @@ if __name__ == '__main__':
 
     hooks = OrderedDict()
 
-    # test_y = theano.function([x_var],
-    #                          [lasagne.layers.get_output(hidden_x[Params.OUTPUT_LAYER], moving_avg_hooks=hooks,
-    #                                                     deterministic=True)],
-    #                          on_unused_input='ignore')
-    # test_x = theano.function([y_var],
-    #                          [lasagne.layers.get_output(hidden_y[Params.OUTPUT_LAYER], moving_avg_hooks=hooks,
-    #                                                     deterministic=True)],
-    #                          on_unused_input='ignore')
-
     test_y = theano.function([x_var],
-                             [lasagne.layers.get_output(model_x[-1], moving_avg_hooks=hooks,
+                             [lasagne.layers.get_output(hidden_x[Params.OUTPUT_LAYER], moving_avg_hooks=hooks,
                                                         deterministic=True)],
                              on_unused_input='ignore')
     test_x = theano.function([y_var],
-                             [lasagne.layers.get_output(model_y[-1], moving_avg_hooks=hooks,
+                             [lasagne.layers.get_output(hidden_y[Params.OUTPUT_LAYER], moving_avg_hooks=hooks,
                                                         deterministic=True)],
                              on_unused_input='ignore')
 

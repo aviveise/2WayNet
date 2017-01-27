@@ -4,6 +4,8 @@ from scipy.spatial.distance import cdist
 import matplotlib
 import traceback
 
+from testing import test_model
+
 matplotlib.use('Agg')
 
 import ConfigParser
@@ -14,11 +16,10 @@ import lasagne
 import numpy
 
 from collections import OrderedDict
-from tabulate import tabulate
 from theano import tensor, theano
 from MISC.container import Container
 from MISC.logger import OutputLog
-from MISC.utils import ConfigSectionMap, complete_rank, euclidean_error, calculate_correlation, batch_normalize_updates
+from MISC.utils import ConfigSectionMap, batch_normalize_updates
 from Models import tied_dropout_iterative_model
 from params import Params
 
@@ -79,53 +80,6 @@ def iterate_single_minibatch(inputs, batchsize, shuffle=False, preprocessor=None
             yield preprocessor(numpy.copy(buffer[excerpt]))
         else:
             yield buffer[excerpt]
-
-
-def test_model(model_x, model_y, dataset_x, dataset_y, preprocessors=None):
-    test_x = dataset_x
-    test_y = dataset_y
-
-    x_total_value = None
-    y_total_value = None
-
-    if preprocessors is None:
-        preprocessors = (None, None)
-
-    for index, batch in enumerate(
-            iterate_single_minibatch(test_x, Params.VALIDATION_BATCH_SIZE, False, preprocessor=preprocessors[0])):
-        x_values = model_y(batch)[Params.OUTPUT_LAYER]
-
-        if x_total_value is None:
-            x_total_value = x_values
-        else:
-            x_total_value = numpy.vstack((x_total_value, x_values))
-
-    for index, batch in enumerate(
-            iterate_single_minibatch(test_y, Params.VALIDATION_BATCH_SIZE, False, preprocessor=preprocessors[1])):
-
-        y_values = model_x(batch)[Params.OUTPUT_LAYER]
-
-        if y_total_value is None:
-            y_total_value = y_values
-        else:
-            y_total_value = numpy.vstack((y_total_value, y_values))
-
-    header = ['layer', 'loss', 'corr', 'search1', 'search5', 'desc1', 'desc5']
-
-    rows = []
-
-    search_recall, describe_recall = complete_rank(x_total_value, y_total_value, data_set.reduce_val)
-
-    loss = euclidean_error(x_total_value, y_total_value)
-    correlation = calculate_correlation(x_total_value, y_total_value)
-
-    print_row = ["{0} ".format(Params.OUTPUT_LAYER), loss, correlation]
-    print_row.extend(search_recall)
-    print_row.extend(describe_recall)
-
-    rows.append(print_row)
-
-    OutputLog().write(tabulate(rows, headers=header))
 
 
 if __name__ == '__main__':
@@ -234,7 +188,8 @@ if __name__ == '__main__':
 
             OutputLog().write('\nValidating model\n')
 
-            test_model(inference_model_x, inference_model_y, tuning_x, tuning_y, preprocessors=data_set.preprocessors)
+            test_model(inference_model_x, inference_model_y, tuning_x, tuning_y, preprocessors=data_set.preprocessors,
+                       reduce=data_set.reduce_val)
 
         if epoch in Params.DECAY_EPOCH:
             current_learning_rate *= Params.DECAY_RATE
@@ -259,7 +214,8 @@ if __name__ == '__main__':
 
     try:
         test_model(inference_model_x, inference_model_y, data_set.testset[0],
-                   data_set.testset[1], preprocessors=data_set.preprocessors)
+                   data_set.testset[1], preprocessors=data_set.preprocessors,
+                   reduce=data_set.reduce_val)
     except Exception as e:
         OutputLog().write('Error testing model with exception {0}'.format(e))
         traceback.print_exc()

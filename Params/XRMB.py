@@ -27,11 +27,11 @@ class Params:
     # endregion
 
     # region Architecture
-    LAYER_SIZES = [560, 112, 1365]
+    LAYER_SIZES = [560, 280, 112, 680, 1365]
     TEST_LAYER = 1
     DROP_PROBABILITY = [0.5, 0.5, 0.5]
     WEIGHT_INIT = lasagne.init.GlorotUniform()
-    LAYER_TYPES = [TiedDenseLayer, TiedDenseLayer, TiedDenseLayer, TiedDenseLayer]
+    LAYER_TYPES = [TiedDenseLayer, TiedDenseLayer, TiedDenseLayer, TiedDenseLayer, TiedDenseLayer, TiedDenseLayer]
     LEAKINESS = 0.3
     LOCALLY_DENSE_M = 2
     NOISE_LAYER = TiedDropoutLayer

@@ -19,7 +19,7 @@ class Params:
     # endregion
 
     # region Loss Weights
-    WEIGHT_DECAY = 0.005
+    WEIGHT_DECAY = 0.05
     GAMMA_COEF = 0.05
     WITHEN_REG_X = 0.5
     WITHEN_REG_Y = 0.5

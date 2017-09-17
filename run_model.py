@@ -38,8 +38,11 @@ def iterate_parallel_minibatches(inputs_x, inputs_y, batchsize, shuffle=False, p
 
     batch_limit = ceil(MEMORY_LIMIT / (inputs_x.shape[1] + inputs_y.shape[1]) / batchsize / 8.)
 
-    buffer_x = numpy.load(inputs_x.filename, 'r')
-    buffer_y = numpy.load(inputs_y.filename, 'r')
+    if not isinstance(input_x) == numpy.ndarray:
+        buffer_x = numpy.load(inputs_x.filename, 'r')
+
+    if not isinstance(input_y) == numpy.ndarray:
+        buffer_y = numpy.load(inputs_y.filename, 'r')
 
     for start_idx in range(0, len(inputs_x) - batchsize + 1, batchsize):
         if shuffle:
@@ -48,8 +51,11 @@ def iterate_parallel_minibatches(inputs_x, inputs_y, batchsize, shuffle=False, p
             excerpt = slice(start_idx, start_idx + batchsize)
 
         if (start_idx / batchsize) % batch_limit == 0:
-            buffer_x = numpy.load(inputs_x.filename, 'r')
-            buffer_y = numpy.load(inputs_y.filename, 'r')
+            if not isinstance(input_x) == numpy.ndarray:
+                buffer_x = numpy.load(inputs_x.filename, 'r')
+
+            if not isinstance(input_y) == numpy.ndarray:
+                buffer_y = numpy.load(inputs_y.filename, 'r')
 
         if preprocessors is not None:
             yield preprocessors[0](numpy.copy(buffer_x[excerpt])), \

@@ -38,6 +38,9 @@ def iterate_parallel_minibatches(inputs_x, inputs_y, batchsize, shuffle=False, p
 
     batch_limit = ceil(MEMORY_LIMIT / (inputs_x.shape[1] + inputs_y.shape[1]) / batchsize / 8.)
 
+    buffer_x = inputs_x
+    buffer_y = inputs_y
+
     if not isinstance(inputs_x, numpy.ndarray):
         buffer_x = numpy.load(inputs_x.filename, 'r')
 
@@ -51,6 +54,9 @@ def iterate_parallel_minibatches(inputs_x, inputs_y, batchsize, shuffle=False, p
             excerpt = slice(start_idx, start_idx + batchsize)
 
         if (start_idx / batchsize) % batch_limit == 0:
+
+            buffer_x = inputs_x
+            buffer_y = inputs_y
             if not isinstance(inputs_x, numpy.ndarray):
                 buffer_x = numpy.load(inputs_x.filename, 'r')
 
